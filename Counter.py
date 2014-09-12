@@ -31,6 +31,7 @@ class Countercomm(object):
     
     def __init__(self, port):
         self.serial = self._open_port(port)
+        print self._serial_read() #will read unknown command
         self._serial_write('a')# flush io buffer
         print self._serial_read() #will read unknown command
 
@@ -64,14 +65,14 @@ class Countercomm(object):
         out = self._serial_read()
         return out 
 
-    def get_logic_level(self):
+    def get_digital(self):
         self._serial_write('LEVEL?')
         level = self._serial_read()
         return level
     
     
     def set_gate_time(self,value):
-        self._serial_write('TIME'+ value)
+        self._serial_write('TIME'+ str(int(value)))
         return 
     
     def set_TTL(self,value):
