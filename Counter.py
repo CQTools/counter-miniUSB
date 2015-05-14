@@ -75,11 +75,12 @@ class Countercomm(object):
         self._serial_write('TIME'+ str(int(value)))
         return 
     
-    def set_TTL(self,value):
+
+    def set_TTL(self):
          self._serial_write('TTL')
          return
          
-    def set_NIM(self,value):
+    def set_NIM(self):
          self._serial_write('NIM')
          return
          

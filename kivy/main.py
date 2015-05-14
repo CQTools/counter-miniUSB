@@ -39,7 +39,7 @@ class FloatInput(TextInput):
         return super(FloatInput, self).insert_text(s, from_undo=from_undo)
 
 class CounterControl(TabbedPanel):
-    counts = StringProperty('0.0')
+    counts = StringProperty('0 0 0')
     frequency = NumericProperty(0.0)
     gate_time = BoundedNumericProperty(100, min=1,max=10000,errorhandler=lambda x: 10000.0 if x > 10000 else 1)
     logic_level = StringProperty('Not connected')
@@ -59,10 +59,8 @@ class CounterControl(TabbedPanel):
     
 
     def update(self, dt):
-        gate_time = self.counter.get_gate_time()
+        self.gate_time = self.counter.get_gate_time()
         self.counts = self.counter.get_counts()
-        print 'gate time' + gate_time
-        print 'counts' + self.counts
         self.plot.points.append((self.iteration*dt,self.iteration))
         self.iteration += 1*dt
         if self.iteration > 150:
@@ -82,9 +80,8 @@ class CounterControl(TabbedPanel):
             self.connected = True
             self.serial = self.counter.serial_number()
             self.logic_level = self.counter.get_digital()
-            self.counter.set_gate_time(100) # sets gate time to 100ms
-            #self.gate_time = self.counter.get_gate_time()
-            #print self.gate_time
+            self.counter.set_gate_time(10) # sets gate time to 100ms
+            self.gate_time =  float(self.counter.get_gate_time())
             plot = MeshLinePlot(color=[0, 1, 0, 1])
             self.ids.graph1.add_plot(plot)
             self.plot = plot
@@ -97,14 +94,22 @@ class CounterControl(TabbedPanel):
         ports = portA + portB
         return ports 
     
-#    def update_gate_time(self,gate_time):
-#        self.gate_time = gate_time
-#        gate_time_sec = gate_time/1000.0 #convert to seconds
-#        if gate_time_sec > self.dt:
-#            self.dt = gate_time_sec
-#        self.counter.set_gate_time(gate_time)
-#        return self.gate_time
+    def update_gate_time(self,gate_time):
+        self.gate_time = gate_time
+        gate_time_sec = gate_time/1000.0 #convert to seconds
+        if gate_time_sec > self.dt:
+            self.dt = gate_time_sec
+        self.counter.set_gate_time(gate_time)
+        return self.gate_time
+    
+    def set_logic_level(self,level):
+        if level == 'NIM':
+            self.counter.set_NIM()
+        elif level == 'TTL':
+            self.counter.set_TTL()
+        return
         
+
 
 class CounterApp(App):
     def build(self):

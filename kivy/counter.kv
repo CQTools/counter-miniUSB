@@ -69,13 +69,13 @@
                     text: 'Counts'
         
                 EchoLabel:
-                    text: str(root.counts)
+                    text: str(root.counts.split()[0])
 
                 PropertyLabel:
                     text: 'Current gate time'
         
                 EchoLabel:
-                    text: str(root.gate_time)
+                    text: str(root.gate_time)  + ' ms'
         
                 PropertyLabel:
                     text: 'Logic level'
@@ -83,9 +83,9 @@
                 Spinner:
                     id: select_logic_level
                     text: str(root.logic_level)
-                    values:('TTL','NIM')
+                    values:('NIM','TTL')
                     size_hint_y: None
-                   # _on_dropdown_select: root.update_range(select_range_2.text)
+                    _on_dropdown_select:  root.set_logic_level(select_logic_level.text)
         
             AnchorLayout:
         
@@ -124,7 +124,7 @@
 
                 FloatInput:
                     id: gate_time
-                    #text: str(root.gate_time)
+                    text: str(root.gate_time)
                     #value:780            
                     
                     font_size: 35
@@ -137,29 +137,116 @@
                     text: str(root.logic_level)
                     values:('TTL','NIM')
                     size_hint_y: None
-                   # _on_dropdown_select: root.update_range(select_logic_level_2.text)
+                    _on_dropdown_select: root.set_logic_level(select_logic_level_2.text)
 
 
 
+            GridLayout:
+                id: power_pannel
+                cols: 3
+                x: root.width / 8
+                width: root.width/1.2
+                top: root.height - root.height / 3
+                row_default_height: 50
+                row_force_default: True
+                spacing: [40,40]   
 
-            AnchorLayout:
-        
-                anchor_x: 'left'
-                anchor_y: 'bottom'
-        
-                x: root.x #+ root.width
-                y: root.y + 0.15*root.height
-        
-                width: root.width
-                height: 0.7 * root.height        
+                PropertyLabel:
+                    text: 'Channel 0'
+
+                PropertyLabel:
+                    text: 'Channel 1'
+
+                PropertyLabel:
+                    text: 'Channel 2'
 
                 EchoLabel:
-                    font_size: 300
-                    text: '0'
+                    id: channel_0
+                    text:  str(root.counts.split()[0])
+                    font_size: 50
+
+                EchoLabel:
+                    id: channel_1
+                    text:  str(root.counts.split()[1])
+                    font_size: 50
+
+                EchoLabel:
+                    id: channel_2
+                    text:  str(root.counts.split()[2])
+                    font_size: 50
+
+    TabbedPanelItem:
+        text: 'Frequency'
+        Label: 
+            GridLayout:
+                id: freq_pannel_1
+                cols: 4
+                x: root.width / 8
+                width: root.width/1.2
+                top: root.height - root.height / 6
+                row_default_height: 50
+                row_force_default: True
+                spacing: [40,40]
+
+                PropertyLabel:
+                    text: 'Gate time'
+
+                FloatInput:
+                    id: gate_time
+                    text: str(root.gate_time)
+                    #value:780            
+                    
+                    font_size: 35
+
+                PropertyLabel:
+                    text: 'Logic level'
+
+                Spinner:
+                    id: select_logic_level_2
+                    text: str(root.logic_level)
+                    values:('TTL','NIM')
+                    size_hint_y: None
+                    _on_dropdown_select: root.set_logic_level(select_logic_level_2.text)
+
+
+
+            GridLayout:
+                id: freq_pannel_2
+                cols: 3
+                x: root.width / 8
+                width: root.width/1.2
+                top: root.height - root.height / 3
+                row_default_height: 50
+                row_force_default: True
+                spacing: [40,40]   
+
+                PropertyLabel:
+                    text: 'Channel 0'
+
+                PropertyLabel:
+                    text: 'Channel 1'
+
+                PropertyLabel:
+                    text: 'Channel 2'
+
+                EchoLabel:
+                    id: channel_0
+                    text:  str(float(root.counts.split()[0])/(1000*root.gate_time))
+                    font_size: 50
+
+                EchoLabel:
+                    id: channel_1
+                    text:  str(float(root.counts.split()[1])/(1000*root.gate_time))
+                    font_size: 50
+
+                EchoLabel:
+                    id: channel_2
+                    text:  str(float(root.counts.split()[2])/(1000*root.gate_time))
+                    font_size: 50
+
 
 
  
-
     TabbedPanelItem:
         text: 'Counts plot'
         Label: 
