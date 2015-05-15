@@ -13,7 +13,7 @@ import glob
 import serial
 from PyQt4 import QtGui, uic
 from PyQt4.QtCore import QTimer
-
+import pyqtgraph as pg
 import Counter as cm
 
 
@@ -66,7 +66,15 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
 		self.ButtonUpdate_channel.clicked.connect(self.ButtonUpdate_channel_clicked)
 		self.ButtonConnect.clicked.connect(self.ButtonConnect_clicked)
 		self.comboSerialBox.addItems(serial_ports()) #Gets a list of avaliable serial ports to connect to and adds to combo box
-		
+		self.comboLogicBox.currentIndexChanged.connect(self.logic_mode_change)
+		self.pen = pg.mkPen(color=(0,0,0), width=2)
+		self.plotWidget.plotItem.getAxis('left').setPen(self.pen)
+		self.plotWidget.plotItem.getAxis('bottom').setPen(self.pen)
+		self.plotWidget.setLabel('left', 'Freq', 'Hz')
+		self.plotWidget.setLabel('bottom', 'Time', 'Sec')
+		self.plotWidget
+		self.freq_samples = []
+		self.timedata = []
 		
 	def ButtonConnect_clicked(self,connection):
 		global channel
@@ -97,17 +105,33 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
 		global channel 
 		channel = self.channel_box.text()
 		self.label_channel.setText(str(channel))
+	
+	def logic_mode_change(self):
+		self.index = self.comboLogicBox.currentIndex()
+		if self.index == 0:
+			self.counter.set_NIM()
+			print 'set counter to NIM'
+		if self.index == 1:
+			self.counter.set_TTL()
+			print 'set counter to TTL'
 		
 		
 	def update(self):
 		self.gate_time  = float(self.counter.get_gate_time())
-		print channel
 		self.timer.setInterval(self.gate_time)
-		self.count = float(self.counter.get_counts().split(' ')[channel])
-		self.freq = float(self.count*1000/self.gate_time)
-		self.gate_time  = float(self.counter.get_gate_time())
-		self.label_count.setText(str(self.count))
-		self.label_freq.setText(str(self.freq) +" Hz")
+		self.plt = self.plotWidget
+		self.time = (self.time + 1)
+		try:
+			self.count = float(self.counter.get_counts().split(' ')[channel])
+			self.freq = float(self.count*1000/self.gate_time)
+			self.gate_time  = float(self.counter.get_gate_time())
+			self.label_count.setText(str(self.count))
+			self.label_freq.setText(str(self.freq) +" Hz")
+			self.freq_samples.append(self.freq)
+			self.timedata.append(self.time*self.gate_time/1000)
+			self.plt.plot(self.timedata,self.freq_samples,clear=True,pen={'color':'k','width':2})
+		except:
+			pass
 		
 		
 		

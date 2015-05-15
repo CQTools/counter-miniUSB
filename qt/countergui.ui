@@ -341,7 +341,7 @@
      <string>1</string>
     </property>
    </widget>
-   <widget class="QComboBox" name="comboBox_logic">
+   <widget class="QComboBox" name="comboLogicBox">
     <property name="geometry">
      <rect>
       <x>250</x>
@@ -386,6 +386,34 @@
      <string>Logic type</string>
     </property>
    </widget>
+   <widget class="PlotWidget" name="plotWidget">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>355</y>
+      <width>986</width>
+      <height>366</height>
+     </rect>
+    </property>
+    <property name="backgroundBrush">
+     <brush brushstyle="SolidPattern">
+      <color alpha="255">
+       <red>255</red>
+       <green>255</green>
+       <blue>255</blue>
+      </color>
+     </brush>
+    </property>
+    <property name="foregroundBrush">
+     <brush brushstyle="NoBrush">
+      <color alpha="255">
+       <red>0</red>
+       <green>0</green>
+       <blue>0</blue>
+      </color>
+     </brush>
+    </property>
+   </widget>
   </widget>
   <widget class="QMenuBar" name="menubar">
    <property name="geometry">
@@ -399,6 +427,13 @@
   </widget>
   <widget class="QStatusBar" name="statusbar"/>
  </widget>
+ <customwidgets>
+  <customwidget>
+   <class>PlotWidget</class>
+   <extends>QGraphicsView</extends>
+   <header location="global">pyqtgraph</header>
+  </customwidget>
+ </customwidgets>
  <resources/>
  <connections/>
  <designerdata>
