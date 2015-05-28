@@ -129,7 +129,7 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
 		try:
 			self.counts = self.counter.get_counts()
 			self.count = float(self.counts.split(' ')[channel])
-			self.freq = float(self.count*1000/gate_time)
+			self.freq = float(self.count*1000/ate_time)
 			self.label_count.setText(str(self.count))
 			self.label_freq.setText(str(self.freq) +" Hz")
 			self.freq_samples.append(self.freq)
