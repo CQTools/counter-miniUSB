@@ -37,7 +37,7 @@ class Countercomm(object):
 
         
     def _open_port(self, port):
-        ser = serial.Serial(port, timeout=5)
+        ser = serial.Serial(port, timeout=1)
         #ser.readline()
         #ser.timeout = 1 #causes problem with nexus 7
         return ser

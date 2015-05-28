@@ -8,7 +8,7 @@ Created on Thu May 14 16:45:23 2015
 import sys
 sys.path.append('../')
 
-import sys
+import time
 import glob
 import serial
 from PyQt4 import QtGui, uic
@@ -78,6 +78,8 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
 		
 	def ButtonConnect_clicked(self,connection):
 		global channel
+		global starttime
+		global gate_time
 		if not self.connected:
 			self.counter = cm.Countercomm(str(self.comboSerialBox.currentText()))
 			self.timer = QTimer()
@@ -90,15 +92,19 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
 			self.gate_time  = float(self.counter.get_gate_time())
 			self.label_gate.setText(str(self.gate_time) +" ms")
 			channel = 1
+			starttime = time.time()
 			self.count = float(self.counter.get_counts().split(' ')[channel])
 			self.freq = float(self.count*1000/self.gate_time)
 			self.label_channel.setText(str(1))
+			gate_time  = float(self.counter.get_gate_time())
 			
 					
 	def ButtonUpdate_gate_clicked(self,value):
+		global gate_time
 		self.counter.set_gate_time(str(self.gate_box.text()))
 		self.label_gate.setText(str(self.counter.get_gate_time())+" ms")
 		print 'gate updated'
+		gate_time  = float(self.counter.get_gate_time())
 		
 	
 	def ButtonUpdate_channel_clicked(self,value):
@@ -117,18 +123,17 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
 		
 		
 	def update(self):
-		self.gate_time  = float(self.counter.get_gate_time())
-		self.timer.setInterval(self.gate_time)
+		self.timer.setInterval(gate_time)
 		self.plt = self.plotWidget
-		self.time = (self.time + 1)
 		try:
-			self.count = float(self.counter.get_counts().split(' ')[channel])
+			self.counts = self.counter.get_counts()
+			self.count = float(self.counts.split(' ')[channel])
 			self.freq = float(self.count*1000/self.gate_time)
-			self.gate_time  = float(self.counter.get_gate_time())
 			self.label_count.setText(str(self.count))
 			self.label_freq.setText(str(self.freq) +" Hz")
 			self.freq_samples.append(self.freq)
-			self.timedata.append(self.time*self.gate_time/1000)
+			self.time = float("{0:.3f}".format(time.time() - starttime))
+			self.timedata.append(self.time)
 			self.plt.plot(self.timedata,self.freq_samples,clear=True,pen={'color':'k','width':2})
 		except:
 			pass
