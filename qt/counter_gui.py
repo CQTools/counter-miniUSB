@@ -131,11 +131,11 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
 			self.count = float(self.counts.split(' ')[channel])
 			self.freq = float(self.count*1000/gate_time)
 			self.label_count.setText(str(self.count))
-			self.label_freq.setText(str(self.freq) +" Hz")
+			self.label_freq.setText(str(self.freq))
 			self.freq_samples.append(self.freq)
 			self.time = float("{0:.3f}".format(time.time() - starttime))
 			self.timedata.append(self.time)
-			self.plt.plot(self.timedata,self.freq_samples,clear=True,pen={'color':'k','width':2})
+			self.plt.plot(self.timedata[:-200],self.freq_samples[:-200],clear=True,pen={'color':'k','width':2})
 		except:
 			pass
 		

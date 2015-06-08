@@ -117,7 +117,7 @@
      </font>
     </property>
     <property name="text">
-     <string>0 Hz</string>
+     <string>0</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_count">
@@ -243,7 +243,7 @@
      </font>
     </property>
     <property name="text">
-     <string>Frequency </string>
+     <string>Rate</string>
     </property>
    </widget>
    <widget class="QLabel" name="label_3">
