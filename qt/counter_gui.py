@@ -71,7 +71,7 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
 		self.pen = pg.mkPen(color=(0,0,0), width=2)
 		self.plotWidget.plotItem.getAxis('left').setPen(self.pen)
 		self.plotWidget.plotItem.getAxis('bottom').setPen(self.pen)
-		self.plotWidget.setLabel('left', 'Freq', 'Hz')
+		self.plotWidget.setLabel('left', 'Rate', '')
 		self.plotWidget.setLabel('bottom', 'Time', 'Sec')
 		self.plotWidget
 		self.freq_samples = []
@@ -135,7 +135,7 @@ class MyWindowClass(QtGui.QMainWindow, form_class):
 			self.freq_samples.append(self.freq)
 			self.time = float("{0:.3f}".format(time.time() - starttime))
 			self.timedata.append(self.time)
-			self.plt.plot(self.timedata[:-200],self.freq_samples[:-200],clear=True,pen={'color':'k','width':2})
+			self.plt.plot(self.timedata[-300:],self.freq_samples[-300:],clear=True,pen={'color':'k','width':2})
 		except:
 			pass
 		
