@@ -27,65 +27,64 @@ import serial
 
 class Countercomm(object):
 # Module for communicating with the mini usb IO board
-    baudrate = 115200
-    
-    def __init__(self, port):
-        self.serial = self._open_port(port)
-        print self._serial_read() #will read unknown command
-        self._serial_write('a')# flush io buffer
-        print self._serial_read() #will read unknown command
+	baudrate = 115200
+	
+	def __init__(self, port):
+		self.serial = self._open_port(port)
+		self._serial_write('a')# flush io buffer
+		print self._serial_read() #will read unknown command
 
-        
-    def _open_port(self, port):
-        ser = serial.Serial(port, timeout=1)
-        #ser.readline()
-        #ser.timeout = 1 #causes problem with nexus 7
-        return ser
+	def _open_port(self, port):
+		ser = serial.Serial(port, timeout=1)
+		return ser
     
-    def _serial_write(self, string):
-        self.serial.write(string + '\n')
+	def _serial_write(self, string):
+		self.serial.write(string + '\n')
     
-    def _serial_read(self):
-        msg_string = self.serial.readline()
-        # Remove any linefeeds etc
-        msg_string = msg_string.rstrip()
-        return msg_string
+	def _serial_read(self):
+		msg_string = self.serial.readline()
+		# Remove any linefeeds etc
+		msg_string = msg_string.rstrip()
+		return msg_string
     
-    def reset(self):
-        self._serial_write('*RST')
-        return self._serial_read()
+	def reset(self):
+		self._serial_write('*RST')
+		return self._serial_read()
         
-    def get_counts(self):
-        self._serial_write('COUNTS?')
-        counts = self._serial_read()
-        return counts
+	def get_counts(self):
+		self._serial_write('COUNTS?')
+		counts = self._serial_read()
+		return counts
         
-    def get_gate_time(self):
-        self._serial_write('TIME?')
-        out = self._serial_read()
-        return out 
+	def get_gate_time(self):
+		self._serial_write('TIME?')
+		out = self._serial_read()
+		return out 
 
-    def get_digital(self):
-        self._serial_write('LEVEL?')
-        level = self._serial_read()
-        return level
+	def get_digital(self):
+		self._serial_write('LEVEL?')
+		level = self._serial_read()
+		return level
     
     
-    def set_gate_time(self,value):
-        self._serial_write('TIME'+ str(int(value)))
-        return 
+	def set_gate_time(self,value):
+		self._serial_write('TIME'+ str(int(value)))
+		 
     
 
-    def set_TTL(self):
-         self._serial_write('TTL')
-         return
+	def set_TTL(self):
+		self._serial_write('TTL')
+		
          
-    def set_NIM(self):
-         self._serial_write('NIM')
-         return
+	def set_NIM(self):
+		self._serial_write('NIM')
+		
          
          
     
-    def serial_number(self):
-        self._serial_write('*IDN?')
-        return self._serial_read()
+	def serial_number(self):
+		self._serial_write('*IDN?')
+		return self._serial_read()
+
+	def close(self):
+		self.serial.close()
